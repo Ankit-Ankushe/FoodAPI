@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>menu</title>
+    <style>
+        #container {
+            display: grid;
+            grid-template-columns: repeat(4, auto);
+            height: auto;
+            gap: 50px;
+            margin: auto;
+        }
+
+        #container>div {
+            padding: 5%;
+            font-weight: bold;
+            box-shadow: rgba(214, 3, 3, 0.3) 0px 0px 0px 3px;
+        }
+        #container>div>img{
+            height: 200px;
+            width: 200px;
+        }
+        h1{
+            text-align: center;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="heading"></h1>
+    <hr><br><br>
+    <div id="container">
+    </div>
+</body>
+<script>
+    function menuDisplay() {
+        let addedCat = localStorage.getItem("addedCat")
+        document.getElementById("heading").innerText = "Category " + addedCat
+        let url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${addedCat}`;
+        fetch(url)
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (res) {
+                // console.log(res.meals)
+                display(res.meals);
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+
+    }
+    function display(data) {
+        console.log(data)
+        data.forEach(dish => {
+            var box = document.createElement("div");
+            var name = document.createElement("p");
+            name.innerText = dish.strMeal;
+
+            var image = document.createElement("img");
+            image.src = dish.strMealThumb;
+
+            box.append(image, name);
+            document.getElementById("container").append(box)
+        });
+    }
+    menuDisplay();
+</script>
+
+</html>
